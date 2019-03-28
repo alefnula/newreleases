@@ -1,0 +1,5 @@
+click==7.0
+dataclasses==0.6
+marshmallow==3.0.0rc4
+requests==2.21.0
+tabulate==0.8.3
