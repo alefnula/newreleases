@@ -55,7 +55,7 @@ def project_get(config, provider, project):
 )
 @click.argument("project", type=str, required=True)
 @click.option(
-    "--email-notifications",
+    "--email-notification",
     type=click.Choice(EmailNotification.choices),
     callback=EmailNotification.click_callback,
     default=EmailNotification.none,
@@ -63,14 +63,14 @@ def project_get(config, provider, project):
 )
 @click.pass_obj
 @handle_client_errors()
-def project_add(config, provider, project, email_notifications):
+def project_add(config, provider, project, email_notification):
     """Add project."""
     print_as_table(
         [
             config.client.project_add(
                 provider=provider,
                 project=project,
-                email_notifications=email_notifications,
+                email_notification=email_notification,
             )
         ]
     )
@@ -86,7 +86,7 @@ def project_add(config, provider, project, email_notifications):
 )
 @click.argument("project", type=str, required=True)
 @click.option(
-    "--email-notifications",
+    "--email-notification",
     type=click.Choice(EmailNotification.choices),
     callback=EmailNotification.click_callback,
     default=EmailNotification.none,
@@ -94,14 +94,14 @@ def project_add(config, provider, project, email_notifications):
 )
 @click.pass_obj
 @handle_client_errors(m404="Project not found.")
-def project_update(config, provider, project, email_notifications):
+def project_update(config, provider, project, email_notification):
     """Update project."""
     print_as_table(
         [
             config.client.project_update(
                 provider=provider,
                 project=project,
-                email_notifications=email_notifications,
+                email_notification=email_notification,
             )
         ]
     )

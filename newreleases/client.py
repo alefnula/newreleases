@@ -107,7 +107,7 @@ class Client(object):
         self,
         provider,
         project,
-        email_notifications=EmailNotification.default,
+        email_notification=EmailNotification.default,
         slack_channels=None,
         hangouts_chat_webhooks=None,
         microsoft_teams_webhooks=None,
@@ -121,7 +121,7 @@ class Client(object):
         Args:
             provider (Provider): Name of the provider.
             project (str): Name of the project.
-            email_notifications (EmailNotifications): How often you want to be
+            email_notification (EmailNotifications): How often you want to be
                 notified about this project.
             slack_channels (list of str): List of slack channel names.
             hangouts_chat_webhooks (list of str): List of hangout webhooks.
@@ -139,7 +139,7 @@ class Client(object):
         data = {
             "provider": provider.value,
             "name": project,
-            "email_notifications": email_notifications.value,
+            "email_notification": email_notification.value,
             "exclude_prereleases": exclude_prereleases,
             "exclude_updated": exclude_updated,
         }
@@ -162,7 +162,7 @@ class Client(object):
         self,
         provider,
         project,
-        email_notifications=EmailNotification.default,
+        email_notification=EmailNotification.default,
         slack_channels=None,
         hangouts_chat_webhooks=None,
         microsoft_teams_webhooks=None,
@@ -176,7 +176,7 @@ class Client(object):
         Args:
             provider (Provider): Name of the provider.
             project (str): Name of the project.
-            email_notifications (EmailNotifications): How often you want to be
+            email_notification (EmailNotifications): How often you want to be
                 notified about this project.
             slack_channels (list of str): List of slack channel names.
             hangouts_chat_webhooks (list of str): List of hangout webhooks.
@@ -192,7 +192,7 @@ class Client(object):
             newreleases.models.Project: Updated project.
         """
         data = {
-            "email_notifications": email_notifications.value,
+            "email_notification": email_notification.value,
             "exclude_prereleases": exclude_prereleases,
             "exclude_updated": exclude_updated,
         }
@@ -222,7 +222,7 @@ class Client(object):
         result = self.client.delete(f"/projects/{provider.value}/{project}")
         return isinstance(result, dict) and result.get("code", None) == 200
 
-    def project_releases(self, provider, project):
+    def release_list(self, provider, project):
         """List Project Releases.
 
         Args:
@@ -236,7 +236,7 @@ class Client(object):
             self.client, url=f"/projects/{provider.value}/{project}/releases"
         )
 
-    def project_release(self, provider, project, version):
+    def release_get(self, provider, project, version):
         """Get a specific project release.
 
         Args:
@@ -253,13 +253,16 @@ class Client(object):
             )
         )
 
-    def project_release_note(self, provider, project, version):
+    def release_note(self, provider, project, version):
         """Get release note for a specific version.
 
         Args:
             provider (Provider): Name of the provider.
             project (str): Name of the project.
             version (str): Version of the release.
+
+        Returns:
+            newreleases.models.ReleaseNote: ReleaseNote object.
         """
         return self._release_note_schema.load(
             self.client.get(

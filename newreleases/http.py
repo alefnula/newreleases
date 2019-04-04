@@ -19,6 +19,7 @@ class HttpClient:
     ERRORS = {
         401: "Unauthorized",
         403: "Forbidden!",
+        404: "Not found.",
         429: "NewReleases under pressure! (Too many requests)",
         500: "You broke NewReleases!!!",
         502: "NewReleases server not reachable.",
@@ -171,7 +172,11 @@ class HttpClient:
             raise HttpClientError(message, response=self.response)
 
         # Generalize unknown messages.
-        raise HttpClientError("Unknown error", response=self.response)
+        try:
+            message = self.response.json()["message"]
+        except Exception:
+            message = "Unknown error."
+        raise HttpClientError(message, response=self.response)
 
     def get(self, url, headers=None, params=None, timeout=None):
         """Perform get request.
