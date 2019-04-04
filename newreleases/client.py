@@ -119,8 +119,8 @@ class Client(object):
             "provider": provider.value,
             "name": project,
             "email_notifications": email_notifications.value,
-            "exclude_prereleases": "true" if exclude_prereleases else "false",
-            "exclude_updated": "true" if exclude_updated else "false",
+            "exclude_prereleases": exclude_prereleases,
+            "exclude_updated": exclude_updated,
         }
         if slack_channels:
             data["slack_channels"] = slack_channels
@@ -172,8 +172,8 @@ class Client(object):
         """
         data = {
             "email_notifications": email_notifications.value,
-            "exclude_prereleases": "true" if exclude_prereleases else "false",
-            "exclude_updated": "true" if exclude_updated else "false",
+            "exclude_prereleases": exclude_prereleases,
+            "exclude_updated": exclude_updated,
         }
         if slack_channels:
             data["slack_channels"] = slack_channels
