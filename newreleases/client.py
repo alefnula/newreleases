@@ -1,6 +1,7 @@
 from base64 import b64encode
 from newreleases.pages import Pages
 from newreleases.http import HttpClient
+from newreleases.errors import ArgumentsError
 from newreleases.enums import Provider, SortOrder, EmailNotification
 from newreleases.schemas import (
     ProjectSchema,
@@ -46,11 +47,19 @@ class Client(object):
             return self._auth_key_schema.load(result["keys"], many=True)
         return []
 
-    def project_list(self, q="", sort=SortOrder.name, reverse=False, page=1):
+    def project_list(
+        self,
+        query=None,
+        provider=None,
+        sort=SortOrder.name,
+        reverse=False,
+        page=1,
+    ):
         """List all projects.
 
         Args:
-            q: (str): Query string. Default: “”.
+            query: (str): Query string..
+            provider (Provider): Filter projects by provider.
             sort: (SortOrder): How to sort projects. Default: SortOrder.name
             reverse (bool): Sort in reverse order.
             page (int): Starting page. Default: 1.
@@ -58,15 +67,27 @@ class Client(object):
         Returns:
             Pages: Pages iterator.
         """
+        if query is not None and provider is not None:
+            raise ArgumentsError(
+                "Either 'query' or 'provider' can be passed in, but not both."
+            )
         params = {"page": page}
-        if q:
-            params["q"] = q
+
+        if query is not None:
+            params["q"] = query
+            return Pages(self.client, url="/projects", params=params)
+        elif provider is not None:
+            params["sort"] = sort.value
+            if reverse:
+                params["reverse"] = reverse
+            return Pages(
+                self.client, url=f"/projects/{provider.value}", params=params
+            )
         else:
             params["sort"] = sort.value
             if reverse:
                 params["reverse"] = reverse
-
-        return Pages(self.client, url="/projects", params=params)
+            return Pages(self.client, url="/projects", params=params)
 
     def project_get(self, provider, project):
         """Get project.

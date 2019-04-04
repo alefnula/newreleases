@@ -29,3 +29,15 @@ def cli(ctx, config, profile):
             click.echo("Before usage run: newreleases configure")
             ctx.exit()
     ctx.obj = Config(config, profile)
+
+
+@cli.group()
+def project():
+    """Project operations."""
+    pass
+
+
+@cli.group()
+def release():
+    """Project release operations."""
+    pass

@@ -1,16 +1,23 @@
 import click
-from newreleases.commands.cli import cli
+from newreleases.commands.cli import project
 from newreleases.utils import handle_client_errors, print_as_table
 from newreleases.enums import Provider, EmailNotification
 
 
-@cli.command("project-list")
+@project.command("list")
 @click.option("-n", "--name", type=str, help="Filter projects by name.")
+@click.option(
+    "-p",
+    "--provider",
+    type=click.Choice(Provider.choices),
+    callback=Provider.click_callback,
+    help="Filter projects by provider",
+)
 @click.pass_obj
 @handle_client_errors()
-def project_list(config, name=None):
+def project_list(config, name=None, provider=None):
     """List all projects."""
-    for page in config.client.project_list(q=name or ""):
+    for page in config.client.project_list(query=name, provider=provider):
         print_as_table(page)
         click.echo(
             "\nPress RETURN for the next page, any other key to stop.\n"
@@ -20,7 +27,7 @@ def project_list(config, name=None):
             break
 
 
-@cli.command("project-get")
+@project.command("get")
 @click.argument(
     "provider",
     required=True,
@@ -38,7 +45,7 @@ def project_get(config, provider, project):
     )
 
 
-@cli.command("project-add")
+@project.command("add")
 @click.argument(
     "provider",
     required=True,
@@ -69,7 +76,7 @@ def project_add(config, provider, project, email_notifications):
     )
 
 
-@cli.command("project-update")
+@project.command("update")
 @click.argument(
     "provider",
     required=True,
@@ -100,7 +107,7 @@ def project_update(config, provider, project, email_notifications):
     )
 
 
-@cli.command("project-delete")
+@project.command("delete")
 @click.argument(
     "provider",
     required=True,
@@ -117,74 +124,3 @@ def project_delete(config, provider, project):
         click.echo(f"Project {provider}/{project} successfully deleted.")
     else:
         click.secho(f"Failed to delete {provider}/{project}", fg="red")
-
-
-@cli.command("releases")
-@click.argument(
-    "provider",
-    required=True,
-    metavar="PROVIDER",
-    type=click.Choice(Provider.choices),
-    callback=Provider.click_callback,
-)
-@click.argument("project", type=str, required=True)
-@click.pass_obj
-@handle_client_errors()
-def project_releases(config, provider, project):
-    """List project releases."""
-    for page in config.client.project_releases(
-        provider=provider, project=project
-    ):
-        print_as_table(page)
-        click.echo(
-            "\nPress RETURN for the next page, any other key to stop.\n"
-        )
-        char = click.getchar()
-        if char != "\r":
-            break
-
-
-@cli.command("release")
-@click.argument(
-    "provider",
-    required=True,
-    metavar="PROVIDER",
-    type=click.Choice(Provider.choices),
-    callback=Provider.click_callback,
-)
-@click.argument("project", type=str, required=True)
-@click.argument("version", type=str, required=True)
-@click.pass_obj
-@handle_client_errors(m404="Release not found.")
-def project_release(config, provider, project, version):
-    """Get a specific release."""
-    print_as_table(
-        [
-            config.client.project_release(
-                provider=provider, project=project, version=version
-            )
-        ]
-    )
-
-
-@cli.command("release-note")
-@click.argument(
-    "provider",
-    required=True,
-    metavar="PROVIDER",
-    type=click.Choice(Provider.choices),
-    callback=Provider.click_callback,
-)
-@click.argument("project", type=str, required=True)
-@click.argument("version", type=str, required=True)
-@click.pass_obj
-@handle_client_errors(m404="Release note not found.")
-def project_release_note(config, provider, project, version):
-    """Get a release note for specific release."""
-    print_as_table(
-        [
-            config.client.project_release_note(
-                provider=provider, project=project, version=version
-            )
-        ]
-    )
