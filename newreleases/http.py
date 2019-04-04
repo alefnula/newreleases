@@ -2,9 +2,7 @@ import os
 from requests import Session, Timeout
 from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError
-
-# requests does monkey patching, causes pylinter to not see it
-from requests.packages.urllib3.util import Retry
+from urllib3.util import Retry
 from newreleases.errors import (
     HttpClientError,
     HttpClientTimeout,
@@ -85,7 +83,7 @@ class HttpClient:
             timeout (float): How many seconds to wait for the server to send
                 data before giving up
         """
-        full_url = os.path.join(self.url, url)
+        full_url = os.path.join(self.url, url.strip("/"))
         headers = {**self.headers, **(headers or {})}
         timeout = timeout or self.timeout
 

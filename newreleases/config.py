@@ -1,6 +1,5 @@
 import io
 import os
-import click
 from configparser import ConfigParser
 from newreleases import consts
 
@@ -35,8 +34,7 @@ class Config(object):
             data = cp[self.profile] if cp.has_section(self.profile) else {}
 
         self.url = consts.NEWRELEASES_API_URL
-        self.api_key = data.get("api_key")
-        self._client = None
+        self.api_key = data.get("api_key", None)
 
     @property
     def client(self):
@@ -45,20 +43,17 @@ class Config(object):
         Returns:
             newreleases.client.Client: Configured newreleases client.
         """
-        if self._client is None:
-            from newreleases.client import Client
+        from newreleases.client import Client
 
-            self._client = Client(self)
-        return self._client
+        return Client(self)
 
-    def configure(self):
-        """Interactive configuration.
+    def configure(self, api_key):
+        """Configure and save configuration to config file.
 
-        This function will prompt you a couple of questions, create the
-        configuration file if it doesn't exist and write the configuration to
-        it.
+        Args:
+            api_key (str): API key.
         """
-        self.api_key = click.prompt("API Key")
+        self.api_key = api_key
         self.save()
 
     def save(self):

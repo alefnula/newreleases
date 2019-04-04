@@ -1,5 +1,6 @@
 click==7.0
 dataclasses==0.6
-marshmallow==3.0.0rc4
+marshmallow==3.0.0rc5
 requests==2.21.0
 tabulate==0.8.3
+urllib3==1.24.1

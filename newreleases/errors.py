@@ -16,6 +16,10 @@ class NewReleasesError(Exception):
     __repr__ = __str__
 
 
+class ArgumentsError(NewReleasesError):
+    pass
+
+
 class ConfigurationError(NewReleasesError):
     pass
 

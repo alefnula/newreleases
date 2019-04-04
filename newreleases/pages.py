@@ -1,11 +1,11 @@
-from newreleases.schemas import ProjectSchema
+from newreleases.schemas import ProjectSchema, ReleaseSchema
 
-SCHEMA_MAPPING = {"projects": ProjectSchema()}
+SCHEMA_MAPPING = {"projects": ProjectSchema(), "releases": ReleaseSchema()}
 
 
 class Pages:
     def __init__(self, client, url, headers=None, params=None):
-        """Page iterator.
+        """Pages iterator.
 
         Args:
             client (newreleases.http.HttpClient): Http client.
