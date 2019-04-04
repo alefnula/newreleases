@@ -22,7 +22,7 @@ class Client(object):
 
     def __init__(self, config):
         self.config = config
-        self.client = HttpClient(url=config.url, api_key=config.api_key)
+        self.client = HttpClient(url=config.url, auth_key=config.auth_key)
 
         # Schemas
         self._project_schema = ProjectSchema()

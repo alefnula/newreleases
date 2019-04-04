@@ -21,7 +21,7 @@ class HttpClient:
     def __init__(
         self,
         url,
-        api_key=None,
+        auth_key=None,
         timeout=60,
         max_retries=3,
         backoff_factor=0.05,
@@ -32,7 +32,7 @@ class HttpClient:
 
         Args:
             url (str): URL to the NewReleases server.
-            api_key (str): NewReleases API key.
+            auth_key (str): NewReleases Auth key.
             timeout (int): Request timeout time.
             max_retries (int): Maximal number of retries.
             backoff_factor (float): Backoff factor.
@@ -40,7 +40,7 @@ class HttpClient:
                 which the service should retry.
         """
         self.url = url
-        self.api_key = api_key
+        self.auth_key = auth_key
         self.timeout = timeout
         self.max_retries = max_retries
         self.backoff_factor = backoff_factor
@@ -49,8 +49,8 @@ class HttpClient:
 
         # Setup headers
         self.headers = {"Content-Type": "application/json"}
-        if self.api_key is not None:
-            self.headers["X-Key"] = self.api_key
+        if self.auth_key is not None:
+            self.headers["X-Key"] = self.auth_key
 
         self.response = None
 

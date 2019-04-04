@@ -18,7 +18,7 @@ class Config(object):
         config (str): Absolute path to the configuration `ini` file.
         profile (str): Selected profile.
         url (str): URL to the newreleases.io api.
-        api_key (str): User auth token.
+        auth_key (str): User auth key.
     """
 
     def __init__(self, config=None, profile="default"):
@@ -34,7 +34,7 @@ class Config(object):
             data = cp[self.profile] if cp.has_section(self.profile) else {}
 
         self.url = consts.NEWRELEASES_API_URL
-        self.api_key = data.get("api_key", None)
+        self.auth_key = data.get("auth_key", None)
 
     @property
     def client(self):
@@ -47,13 +47,13 @@ class Config(object):
 
         return Client(self)
 
-    def configure(self, api_key):
+    def configure(self, auth_key):
         """Configure and save configuration to config file.
 
         Args:
-            api_key (str): API key.
+            auth_key (str): Auth key.
         """
-        self.api_key = api_key
+        self.auth_key = auth_key
         self.save()
 
     def save(self):
@@ -72,7 +72,7 @@ class Config(object):
             cp.add_section(self.profile)
 
         # Write the current configuration to the profile
-        cp[self.profile]["api_key"] = self.api_key
+        cp[self.profile]["auth_key"] = self.auth_key
 
         # Save configuration
         with io.open(self.config, "w") as f:

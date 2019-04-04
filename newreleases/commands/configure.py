@@ -8,29 +8,29 @@ from newreleases.utils import handle_client_errors, print_as_table
 @handle_client_errors()
 def configure(config):
     """Configure newreleases."""
-    api_key = click.prompt("API Key")
-    config.configure(api_key=api_key)
+    auth_key = click.prompt("Auth Key")
+    config.configure(auth_key=auth_key)
 
 
-@cli.command("get-auth-token")
+@cli.command("get-auth-key")
 @click.pass_obj
 @handle_client_errors()
-def get_auth_token(config):
-    """Download auth token and save it in configuration."""
+def get_auth_key(config):
+    """Download auth key and save it in configuration."""
     username = click.prompt("Username")
     password = click.prompt("Password", hide_input=True)
-    api_keys = config.client.tokens_list(username, password)
-    if len(api_keys) == 0:
-        click.secho("No api keys found.")
-        click.secho("Go to https://newreleases.io and create an API key.")
+    auth_keys = config.client.auth_key_list(username, password)
+    if len(auth_keys) == 0:
+        click.secho("No auth keys found.")
+        click.secho("Go to https://newreleases.io and create an auth key.")
     else:
-        print_as_table(api_keys, show_row_number=True)
-        n_api_keys = len(api_keys)
+        print_as_table(auth_keys, show_row_number=True)
+        n_auth_keys = len(auth_keys)
         selection = "0"
-        while not (selection.isdigit() and 0 < int(selection) <= n_api_keys):
+        while not (selection.isdigit() and 0 < int(selection) <= n_auth_keys):
             selection = click.prompt(
-                "Select api key (enter row number)"
+                "Select auth key (enter row number)"
             ).strip()
 
-        api_key = api_keys[int(selection) - 1]
-        config.configure(api_key=api_key.secret)
+        auth_key = auth_keys[int(selection) - 1]
+        config.configure(auth_key=auth_key.secret)
