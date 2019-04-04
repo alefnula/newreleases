@@ -1,6 +1,7 @@
 from typing import List
 from datetime import datetime
 from dataclasses import dataclass, asdict, field
+from newreleases.enums import EmailNotification
 
 
 class ModelMeta(type):
@@ -53,7 +54,7 @@ class Project(ModelBase):
     name: str
     provider: str
     url: str
-    email_notification: str
+    email_notification: str = EmailNotification.default.value
     slack_channels: List[SlackChannel] = field(default_factory=list)
     hangouts_chat_webhooks: List[str] = field(default_factory=list)
     microsoft_teams_webhooks: List[str] = field(default_factory=list)

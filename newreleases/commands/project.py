@@ -121,6 +121,6 @@ def project_update(config, provider, project, email_notifications):
 def project_delete(config, provider, project):
     """Delete project."""
     if config.client.project_delete(provider=provider, project=project):
-        click.echo(f"Project {provider}/{project} successfully deleted.")
+        click.echo(f"Project {provider.value}:{project} successfully deleted.")
     else:
         click.secho(f"Failed to delete {provider}/{project}", fg="red")

@@ -34,7 +34,8 @@ class SortOrder(Enum):
 
 
 class EmailNotification(Enum):
-    none = ""
+    none = "none"
     hourly = "hourly"
     daily = "daily"
     weekly = "weekly"
+    default = "default"

@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields, post_load
 from newreleases import models
+from newreleases.enums import EmailNotification
 
 
 class BaseSchema(Schema):
@@ -47,7 +48,7 @@ class ProjectSchema(BaseSchema):
     name = fields.String(required=True)
     provider = fields.String(required=True)
     url = fields.Url(required=True)
-    email_notification = fields.String(required=True)
+    email_notification = fields.String(default=EmailNotification.default.value)
     slack_channels = fields.Nested(SlackChannelSchema, many=True)
     hangouts_chat_webhooks = fields.List(fields.String())
     microsoft_teams_webhooks = fields.List(fields.String())
