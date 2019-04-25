@@ -1,10 +1,11 @@
+from typing import Type
 from marshmallow import Schema, fields, post_load
 from newreleases import models
 from newreleases.enums import EmailNotification
 
 
 class BaseSchema(Schema):
-    __model__ = None
+    __model__: Type = models.ModelBase
 
     @post_load
     def post_load(self, data):

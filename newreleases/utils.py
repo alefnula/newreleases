@@ -30,13 +30,16 @@ def print_as_table(objects, show_row_number=False):
         objects: List of Model instances.
         show_row_number: Should the first column be the row number.
     """
+    if not isinstance(objects, list):
+        objects = [objects]
     if len(objects) == 0:
         click.secho(f"No items found.", fg="red")
-    headers = objects[0].__class__.headers
-    if show_row_number:
-        objects = [[i, *list(obj)] for i, obj in enumerate(objects, 1)]
-        headers = ["#", *headers]
+    else:
+        headers = objects[0].__class__.headers
+        if show_row_number:
+            objects = [[i, *list(obj)] for i, obj in enumerate(objects, 1)]
+            headers = ["#", *headers]
 
-    click.echo(
-        tabulate.tabulate(objects, headers=headers, tablefmt="fancy_grid")
-    )
+        click.echo(
+            tabulate.tabulate(objects, headers=headers, tablefmt="fancy_grid")
+        )

@@ -6,19 +6,7 @@
         language: python
         entry: black
         args:
-            - --target-version=py37
-            - --safe
-            - --line-length=79
             - newreleases
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.1.0
-  hooks:
-      - id: requirements-txt-fixer
-        name: Requirements file fixer
-        language: python
-        args:
-            - requirements.txt
-            - requirements-dev.txt
 
 - repo: https://gitlab.com/pycqa/flake8
   rev: 3.7.7
@@ -39,3 +27,10 @@
         entry: pydocstyle
         args:
             - newreleases
+
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: master
+  hooks:
+      - id: mypy
+        args:
+            - --ignore-missing-imports

@@ -1,10 +1,13 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
+# Python
 *.py[cod]
+.ipynb_checkpoints
 
-# Distribution / packaging
-*.egg-info
-VERSION
+# IDE
+.idea
+
+# Poetry
+pip-wheel-metadata
+newreleases.egg-info
 
 # Unit test / coverage reports
 .cache
@@ -13,14 +16,11 @@ VERSION
 coverage.xml
 .pytest_cache/
 
+# Code check
+.mypy_cache/
+
 # Sphinx documentation
 docs/_build/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Development environment
-.idea
 
 # Mock configuration
 config/
