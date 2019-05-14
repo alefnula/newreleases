@@ -44,7 +44,7 @@ class Client(object):
         headers = {"Authorization": f"Basic {auth}"}
         result = self.client.get("/auth/keys", headers=headers)
         if "keys" in result:
-            return self._auth_key_schema.load(result["keys"], many=True)
+            return self._auth_key_schema.load(result["keys"], many=True).data
         return []
 
     def project_list(
@@ -101,7 +101,7 @@ class Client(object):
         """
         return self._project_schema.load(
             self.client.get(f"/projects/{provider.value}/{project}")
-        )
+        ).data
 
     def project_add(
         self,
@@ -156,7 +156,7 @@ class Client(object):
 
         return self._project_schema.load(
             self.client.post(f"/projects", data=data)
-        )
+        ).data
 
     def project_update(
         self,

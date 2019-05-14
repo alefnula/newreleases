@@ -38,4 +38,4 @@ class Pages:
             raise StopIteration("Bad data.")
 
         for key, value in data.items():
-            return SCHEMA_MAPPING[key].load(value, many=True)
+            return SCHEMA_MAPPING[key].load(value, many=True).data

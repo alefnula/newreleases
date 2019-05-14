@@ -124,25 +124,22 @@ class HttpClient:
         except Timeout as e:
             # If request timed out, let upper level handle it they way it sees
             # fit one place might want to retry another might not.
-            raise HttpClientTimeout(from_error=e)
+            raise HttpClientTimeout() from e
 
         except ConnectionError as e:
-            raise HttpClientError(
-                f"NewReleases server not reachable.", from_error=e
-            )
+            raise HttpClientError(f"NewReleases server not reachable.") from e
 
         except Exception as e:
-            raise HttpClientError(f"Unknown error: {e}", from_error=e)
+            raise HttpClientError(f"Unknown error. {e!r}") from e
 
         if self.response.status_code == 200:
             try:
                 return self.response.json() if self.response.text else {}
             except Exception as e:
                 raise HttpClientError(
-                    f"Error while parsing server response: {e}",
+                    f"Error while parsing server response: {e!r}",
                     response=self.response,
-                    from_error=e,
-                )
+                ) from e
         # Check rate limit
         limit = self.response.headers.get("X-Ratelimit-Limit", None)
         if limit is not None:

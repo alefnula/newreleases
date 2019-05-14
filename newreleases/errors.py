@@ -2,9 +2,8 @@ from requests import Response
 
 
 class NewReleasesError(Exception):
-    def __init__(self, message, from_error=None):
+    def __init__(self, message):
         self.message = message
-        self.from_error = from_error
 
     @property
     def name(self):
@@ -25,8 +24,8 @@ class ConfigurationError(NewReleasesError):
 
 
 class HttpClientError(NewReleasesError):
-    def __init__(self, message, response=None, from_error=None):
-        super().__init__(message, from_error)
+    def __init__(self, message, response=None):
+        super().__init__(message)
         self.response: Response = response
         self.status_code = (
             response.status_code if response is not None else 500
@@ -68,17 +67,13 @@ class HttpClientTimeout(HttpClientError):
         The server did not send any data in the allotted amount of time.
     """
 
-    def __init__(self, from_error=None):
-        super().__init__("Timeout exceeded", from_error=from_error)
+    def __init__(self):
+        super().__init__("Timeout exceeded")
 
 
 class HttpRateLimitExceeded(HttpClientError):
-    def __init__(
-        self, response, limit, remaining, reset, retry, from_error=None
-    ):
-        super().__init__(
-            "Rate limit exceeded.", response=response, from_error=from_error
-        )
+    def __init__(self, response, limit, remaining, reset, retry):
+        super().__init__("Rate limit exceeded.", response=response)
         self.limit = limit
         self.remaining = remaining
         self.reset = reset
@@ -94,11 +89,11 @@ class HttpRateLimitExceeded(HttpClientError):
 
 
 class SerializationError(NewReleasesError):
-    def __init__(self, errors, from_error=None):
+    def __init__(self, errors):
         """Thrown when the client cannot serialize or deserialize an object.
 
         Args:
             errors (dict): Dictionary of found errors
         """
-        super().__init__("Serialization error.", from_error)
+        super().__init__("Serialization error.")
         self.errors = errors
