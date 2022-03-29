@@ -17,7 +17,7 @@ html2text = "^2018.1"
 marshmallow = "^2.19"
 
 [tool.poetry.dev-dependencies]
-poetry = "1.0.0a2"
+poetry = "1.1.9"
 black = "19.3b0"
 flake8 = "^3.7"
 pre-commit = "^1.15"
